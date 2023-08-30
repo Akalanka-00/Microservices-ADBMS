@@ -1,28 +1,23 @@
 package com.microservice.inventory_management.Entity;
 
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "Products")
-public class Product {
+
+@Table(name = "ProductTypes")
+public class ProductType {
 
     @Id
     @GeneratedValue
-    @Column(unique = true)
     private int id;
     private String name;
-    private long unitPrice;
+    private String description;
     private int quantity;
-    @Temporal(TemporalType.DATE)
-    private Date date;
 
 }

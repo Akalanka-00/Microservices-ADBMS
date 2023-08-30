@@ -3,9 +3,7 @@ package com.microservice.inventory_management.Controller;
 import com.microservice.inventory_management.Entity.Product;
 import com.microservice.inventory_management.Service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,4 +23,10 @@ public class ProductController {
     public Product getProductByName(@PathVariable String name){
         return service.getProductByName(name);
     }
+
+    @PostMapping("/addProduct")
+    public Product addProduct (@RequestBody Product product){
+        return service.saveProduct(product);
+    }
+
 }
