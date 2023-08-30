@@ -36,7 +36,8 @@ public class ProductTypeService {
         existingProductType.setName(type.getName());
         if(type.getDescription()!=null)
         existingProductType.setDescription(type.getDescription());
-        existingProductType.setQuantity(type.getQuantity());
+        if(type.getQuantity()>0)
+            existingProductType.setQuantity(type.getQuantity());
 
         return repository.save(existingProductType);
 

@@ -1,10 +1,13 @@
 package com.microservice.inventory_management.Controller;
 
 import com.microservice.inventory_management.Entity.Product;
+import com.microservice.inventory_management.Entity.ProductType;
 import com.microservice.inventory_management.Service.ProductService;
+import com.microservice.inventory_management.Service.ProductTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -12,6 +15,8 @@ public class ProductController {
 
     @Autowired
     private ProductService service;
+    @Autowired
+    private ProductTypeService productTypeService;
 
 
     @GetMapping("/products")
@@ -20,13 +25,64 @@ public class ProductController {
     }
 
     @GetMapping("/product/{name}")
-    public Product getProductByName(@PathVariable String name){
+    public List<Product> getProductByName(@PathVariable String name){
+
         return service.getProductByName(name);
     }
 
     @PostMapping("/addProduct")
-    public Product addProduct (@RequestBody Product product){
-        return service.saveProduct(product);
+    public Object addProduct (@RequestBody Product product){
+
+        ProductType type = productTypeService.findProductTypeByName(product.getName());
+        if(type!=null){
+            type.setQuantity(type.getQuantity()+product.getQuantity());
+            productTypeService.updateProductType(type);
+            return service.saveProduct(product);
+        }else
+        return "Product Type is not available"; //service.saveProduct(product);
     }
 
+    @PostMapping("/addProducts")
+    public Object addProducts (@RequestBody List<Product> products){
+
+        StringBuilder existProductTypes = new StringBuilder();
+        StringBuilder notExistProductTypes = new StringBuilder();
+
+        List <Product> savedProducts = new ArrayList<>();
+        for (Product product:
+             products) {
+            ProductType type = productTypeService.findProductTypeByName(product.getName());
+            if(type==null){
+                notExistProductTypes.append("\n\t* ").append(product.getName());
+            }else {
+                existProductTypes.append("\n\t* ").append(product.getName());
+                savedProducts.add(service.saveProduct(product));
+            }
+        }
+       if(!notExistProductTypes.isEmpty()){
+           return "Following products are not available in the system \n" + notExistProductTypes+"\n\nAnd only these products has been inserted to the system.\n" + existProductTypes;
+       }else if(notExistProductTypes.isEmpty()){
+           return savedProducts;
+       }else {
+           return "All the product types are not available in the store!!!";
+       }
+    }
+
+    @PutMapping("/product")
+    public Object updateProduct(@RequestBody Product product){
+        ProductType type = productTypeService.findProductTypeByName(product.getName());
+        if(type!=null) {
+
+            return service.updateProduct(product);
+        }
+        else {
+
+            return "Product type is not available.";
+        }
+    }
+
+    @DeleteMapping("product/{id}")
+    public String deleteProduct(@PathVariable int id){
+        return  service.deleteProduct(id);
+    }
 }
