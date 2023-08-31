@@ -26,4 +26,5 @@ public class Product {
     @Temporal(TemporalType.DATE)
     private Date date;
 
+
 }

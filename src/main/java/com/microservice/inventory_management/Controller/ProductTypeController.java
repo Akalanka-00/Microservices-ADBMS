@@ -20,6 +20,12 @@ public class ProductTypeController {
         return service.newProductType(type);
     }
 
+    @PostMapping("/newProductTypes")
+    public List<ProductType> newProductType(@RequestBody  List<ProductType> types){
+        return service.newProductTypes(types);
+    }
+
+
     @GetMapping("/productTypes")
     public List<ProductType> getProductTypes(){
         return service.productTypes();

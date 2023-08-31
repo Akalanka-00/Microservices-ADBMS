@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -32,14 +33,8 @@ public class ProductController {
 
     @PostMapping("/addProduct")
     public Object addProduct (@RequestBody Product product){
+        return service.saveProduct(product);
 
-        ProductType type = productTypeService.findProductTypeByName(product.getName());
-        if(type!=null){
-            type.setQuantity(type.getQuantity()+product.getQuantity());
-            productTypeService.updateProductType(type);
-            return service.saveProduct(product);
-        }else
-        return "Product Type is not available"; //service.saveProduct(product);
     }
 
     @PostMapping("/addProducts")
@@ -52,11 +47,12 @@ public class ProductController {
         for (Product product:
              products) {
             ProductType type = productTypeService.findProductTypeByName(product.getName());
-            if(type==null){
-                notExistProductTypes.append("\n\t* ").append(product.getName());
+            if(type!=null){
+                existProductTypes.append(product.getName());
+                service.saveProduct(product);
+                savedProducts.add(product);
             }else {
-                existProductTypes.append("\n\t* ").append(product.getName());
-                savedProducts.add(service.saveProduct(product));
+                notExistProductTypes.append((product.getName()));
             }
         }
        if(!notExistProductTypes.isEmpty()){

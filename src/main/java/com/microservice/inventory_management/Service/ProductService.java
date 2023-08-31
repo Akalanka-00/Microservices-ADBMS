@@ -19,9 +19,18 @@ public class ProductService {
     @Autowired
     private ProductTypeService service;
 
-    public Product saveProduct(Product product){
+    public Object saveProduct(Product product){
         product.setDate(new Date());
-        return   repository.save(product);
+
+        ProductType type = service.findProductTypeByName(product.getName());
+        if(type!=null){
+            type.setQuantity(type.getQuantity()+product.getQuantity());
+            service.updateProductType(type);
+            return   repository.save(product);
+
+        }
+        return "Product Type is not available"; //service.saveProduct(product);
+
     }
 
     public List<Product> saveProducts(List<Product> products){
@@ -48,18 +57,22 @@ public class ProductService {
 
     public Product updateProduct(Product product){
         Product existingProduct = repository.findById(product.getId()).orElse(null);
+        int quantity = existingProduct.getQuantity();
+        System.out.println(quantity);
         if(product.getName()!=null)
             existingProduct.setName(product.getName());
         if(product.getUnitPrice()>0)
         existingProduct.setUnitPrice(product.getUnitPrice());
-        if(product.getQuantity()>0)
+        if(product.getQuantity()>0) {
             existingProduct.setQuantity(product.getQuantity());
-        int quantity = product.getQuantity() - existingProduct.getQuantity();
+             quantity = product.getQuantity() - quantity;
+        }
 
         ProductType type = service.findProductTypeByName(existingProduct.getName());
         type.setQuantity(type.getQuantity() + quantity);
-        service.updateProductType(type);
 
+        service.updateProductType(type);
+        System.out.println(quantity);
         return repository.save(existingProduct);
 
     }

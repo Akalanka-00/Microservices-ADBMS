@@ -17,6 +17,10 @@ public class ProductTypeService {
         return   repository.save(type);
     }
 
+    public List<ProductType> newProductTypes(List<ProductType> types){
+        return   repository.saveAll(types);
+    }
+
     public List<ProductType> productTypes(){
         return   repository.findAll();
     }
