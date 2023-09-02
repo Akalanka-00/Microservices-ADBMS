@@ -1,6 +1,8 @@
 package com.microservice.inventory_management.Service;
 
+import com.microservice.inventory_management.Entity.Product;
 import com.microservice.inventory_management.Entity.ProductType;
+import com.microservice.inventory_management.Repository.ProductRepository;
 import com.microservice.inventory_management.Repository.ProductTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +14,8 @@ public class ProductTypeService {
 
     @Autowired
     private ProductTypeRepository repository;
+    @Autowired
+    private ProductService service;
 
     public ProductType newProductType(ProductType type){
         return   repository.save(type);
@@ -46,4 +50,23 @@ public class ProductTypeService {
         return repository.save(existingProductType);
 
     }
+
+    public String deleteProductType(int id){
+
+        ProductType type = repository.findById(id).orElse(null);
+        if(type!=null) {
+            List<Product> products = service.getProductByName(type.getName());
+            for (Product product :
+                    products) {
+                service.deleteProduct(product.getId());
+
+            }
+            repository.deleteById(id);
+            return "Product type '" + type.getName() + "' has been deleted successfully!";
+        }else {
+            return "Product ID: " + id + " Couldn't found in the system";
+        }
+    }
+
+
 }

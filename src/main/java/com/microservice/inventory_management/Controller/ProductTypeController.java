@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+//@RequestMapping("/api/inventory")
 public class ProductTypeController {
 
     @Autowired
@@ -44,5 +45,10 @@ public class ProductTypeController {
     @PutMapping("/productType")
     public ProductType updateProductType(@RequestBody ProductType type){
         return service.updateProductType(type);
+    }
+
+    @DeleteMapping("productType/{id}")
+    public String deleteProductType(@PathVariable int id){
+        return service.deleteProductType(id);
     }
 }

@@ -18,7 +18,6 @@ public class Product {
 
     @Id
     @GeneratedValue
-    @Column(unique = true)
     private int id;
     private String name;
     private long unitPrice;
