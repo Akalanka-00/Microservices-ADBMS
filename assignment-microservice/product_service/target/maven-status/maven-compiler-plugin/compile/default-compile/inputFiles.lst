@@ -1,0 +1,7 @@
+J:\springboot\microservices-new\product_service\src\main\java\com\shoppingApp\product_service\ProductServiceApplication.java
+J:\springboot\microservices-new\product_service\src\main\java\com\shoppingApp\product_service\controller\ProductController.java
+J:\springboot\microservices-new\product_service\src\main\java\com\shoppingApp\product_service\dto\ProductRequest.java
+J:\springboot\microservices-new\product_service\src\main\java\com\shoppingApp\product_service\service\ProductService.java
+J:\springboot\microservices-new\product_service\src\main\java\com\shoppingApp\product_service\dto\ProductResponse.java
+J:\springboot\microservices-new\product_service\src\main\java\com\shoppingApp\product_service\model\Product.java
+J:\springboot\microservices-new\product_service\src\main\java\com\shoppingApp\product_service\repository\ProductRepository.java
